@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+      <style>
+          #loading-spinner {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: #f0f2f5; /* 浅灰色背景，与 Vuetify 风格一致 */
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 9999;
+              opacity: 1;
+              transition: opacity 0.5s ease-out; /* 平滑过渡效果 */
+          }
+
+          /* 当应用加载完成后，隐藏加载动画 */
+          #loading-spinner.hidden {
+              opacity: 0;
+              visibility: hidden;
+          }
+          /* 动画主体 - 点阵波浪 */
+          .dot-wave {
+              display: flex;
+              align-items: center;
+          }
+          .dot-wave__dot {
+              width: 12px;
+              height: 12px;
+              background-color: #1976d2; /* 使用 Vuetify 的 primary 颜色 */
+              border-radius: 50%;
+              margin: 0 4px;
+              animation: wave-animation 1s infinite ease-in-out;
+          }
+          /* 为每个点设置不同的动画延迟 */
+          .dot-wave__dot:nth-child(1) { animation-delay: 0s; }
+          .dot-wave__dot:nth-child(2) { animation-delay: 0.1s; }
+          .dot-wave__dot:nth-child(3) { animation-delay: 0.2s; }
+          .dot-wave__dot:nth-child(4) { animation-delay: 0.3s; }
+
+          /* 动画关键帧 */
+          @keyframes wave-animation {
+              0%, 40%, 100% { transform: scale(0.6); }
+              20% { transform: scale(1); }
+          }
+
+          /* 针对深色模式的自适应 */
+          @media (prefers-color-scheme: dark) {
+              #loading-spinner {
+                  background-color: #121212; /* Vuetify 深色模式的背景色 */
+              }
+              .dot-wave__dot {
+                  background-color: #42a5f5; /* Vuetify 深色模式的 primary 颜色 */
+              }
+          }
+      </style>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+      <title>AI智能体</title>
+  </head>
+  <body>
+
+  <div id="loading-spinner">
+      <div class="dot-wave">
+          <div class="dot-wave__dot"></div>
+          <div class="dot-wave__dot"></div>
+          <div class="dot-wave__dot"></div>
+          <div class="dot-wave__dot"></div>
+      </div>
+  </div>
+
+  <div id="app"></div>
+  </body>
+</html>
