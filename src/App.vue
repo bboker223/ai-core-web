@@ -1,62 +1,49 @@
 <template>
   <v-app>
-    <div v-if="!$store.state.isInitialized" >
-      <v-skeleton-loader
-          :color="`grey ${$vuetify.theme.dark  ? 'darken-2' : 'lighten-4'}`"
-          height="100%"
-          type="card@2"
-      ></v-skeleton-loader>
-    </div>
-    <div v-else>
-      <router-view></router-view>
-    </div>
+    <transition name="fade">
+      <div v-if="$root.globalLoading" class="bamo-gradient-bar"></div>
+    </transition>
+    <router-view />
   </v-app>
 </template>
 
-<script>
-import store from './store';
-export default {
-  name: 'App',
-  inject: {},
-  data: () => ({
-    //
-  }),
-  created() {
 
-  },
-  methods:{
-  }
-};
+<script>
+export default {
+  name: 'App'
+}
 </script>
 
 <style>
-
-:root {
-  --v-font-body: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --v-font-heading: 'Roboto Condensed', 'Arial Narrow', sans-serif;
+/* 隐藏原生滚动条，保持界面整洁 */
+html {
+  overflow-y: auto;
 }
 
-body {
-  font-family: var(--v-font-body);
-  font-weight: 400;
+/* 工业互联网标志性流光渐变条 */
+.bamo-gradient-bar {
+  height: 4px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  background: linear-gradient(90deg, #c019d2, #00BCD4, #4CAF50, #1976D2);
+  background-size: 200% 100%;
+  animation: gradientMove 3s ease infinite;
 }
 
-h1, h2, h3, .text-h4, .text-h5 {
-  font-family: var(--v-font-heading);
-  font-weight: 700;
+@keyframes gradientMove {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
-.v-application {
-  font-family: var(--v-font-body) !important; /* 覆盖Vuetify基础样式 */
+/* 新增渐隐动画 */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 
-</style>
-
-<style>
-
-
-/* 移除 v-app 的背景色，让背景透明 */
-.v-application--wrap {
-  background-color: transparent !important;
-}
 </style>

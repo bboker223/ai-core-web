@@ -36,6 +36,12 @@ new Vue({
   router,
   store,
   vuetify,
+  data() {
+    return {
+      // 核心黑盒：全局防闪烁与流光条调度状态
+      globalLoading: false
+    }
+  },
   render: h => h(App)
 }).$mount('#app')
 
