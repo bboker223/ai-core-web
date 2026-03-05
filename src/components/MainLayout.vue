@@ -37,7 +37,7 @@
 
       <v-list nav class="px-3 mt-4">
         <div class="px-2 mb-2 text-caption grey--text font-weight-bold">核心解析模型</div>
-        <v-list-item-group v-model="activeAppId" color="#1976D2">
+        <v-list-item-group v-model="activeAppId" color="#1976D2" mandatory>
           <v-list-item
               v-for="app in appList"
               :key="app.id"
@@ -83,12 +83,13 @@ export default {
   components: { AIPortal, EmptyState },
   data() {
     return {
-      activeAppId: null,
+      activeAppId: false,
       appList: []        // 真实的数据列表
     }
   },
   created() {
     this.fetchAppList();
+    console.log(this.activeAppId);
   },
   computed: {
     currentAppUrl() {
@@ -98,15 +99,10 @@ export default {
     }
   },
   methods: {
-
     async fetchAppList() {
       try {
         const userId = localStorage.getItem('bamo_userId');
-
-        // 这里需要配置你的 token 头传递方式，通常在 axios 拦截器里做，这里演示直接传
         const res = await this.$axios.get(`${this.$url.baseUrl}/api/portal/app/list?userId=${userId}`);
-        console.log(res);
-        // 将后端驼峰字段映射到前端
         this.appList = res.data.data.map(item => ({
           id: item.id,
           name: item.appName,
@@ -120,10 +116,10 @@ export default {
     },
     handleAppClick(app) {
       if (app.isSecure) {
-        console.warn('【安全熔断】需前置 AuthDialog 提权授权', app.name);
-      } else {
-        this.activeAppId = app.id; // 点击后才触发右侧 iframe 渲染
+        console.warn('检测到受控应用，暂时放行用于测试切换逻辑', app.name);
       }
+      // 无论是公开还是受控，先让右侧切换
+      // this.activeAppId = app.id;
     },
 
 

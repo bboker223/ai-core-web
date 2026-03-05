@@ -3,19 +3,13 @@
     <v-overlay
         :value="iframeLoading"
         absolute
-        color="#F9FAFB"
+        color="#FFFFFF"
         opacity="1"
         z-index="10"
         class="d-flex flex-column align-center justify-center"
     >
       <div class="text-center">
-        <v-progress-circular
-            indeterminate
-            color="#38BDF8"
-            size="56"
-            width="4"
-            class="mb-4"
-        ></v-progress-circular>
+        <v-progress-circular indeterminate color="#2196F3" size="56" width="4" class="mb-4"></v-progress-circular>
         <div class="text-subtitle-2 grey--text text--darken-2 font-weight-medium tracking-wide">
           正在建立信道 ...
         </div>
@@ -23,37 +17,49 @@
     </v-overlay>
 
     <iframe
-        :src="currentMaxkbUrl"
+        :key="appUrl"
+        :src="appUrl"
         class="bamo-maxkb-iframe"
         :style="{ opacity: iframeLoading ? 0 : 1 }"
         frameborder="0"
         allow="microphone; camera; clipboard-read; clipboard-write"
         @load="handleIframeReady"
     ></iframe>
-
-
   </div>
 </template>
 
 <script>
 export default {
   name: 'AIPortal',
+  props: {
+    appId: {
+      type: [String, Number],
+      required: true
+    },
+    appUrl: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
-      iframeLoading: true,
-      // 真实场景下，这里的 Token '37a62b89b9480517' 应该从 Vuex 管理的选中应用列表中动态获取
-      currentMaxkbUrl: 'http://192.168.8.141:8080/chat/37a62b89b9480517?mode=mobile'
+      iframeLoading: true
     }
   },
   watch: {
-    // 监听侧边栏切换应用导致的 URL 变化，重新触发加载态
-    currentMaxkbUrl() {
-      this.iframeLoading = true;
+    // 监听传入的 URL 变化，一旦变化，马上亮起骨架屏动画
+    appUrl: {
+      immediate: true,
+      handler(newVal) {
+        if (newVal) {
+          this.iframeLoading = true;
+        }
+      }
     }
   },
   methods: {
     handleIframeReady() {
-      // 增加 300ms 缓冲期，等待 MaxKB 内部 Vue/React 渲染 DOM，彻底阻断白屏
+      // 缓冲 300ms 等待内部 DOM 渲染
       setTimeout(() => {
         this.iframeLoading = false;
       }, 300);
