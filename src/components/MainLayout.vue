@@ -39,14 +39,14 @@
         <div class="px-2 mb-2 text-caption grey--text font-weight-bold">核心解析模型</div>
         <v-list-item-group v-model="activeAppId" color="#1976D2">
           <v-list-item
-              v-for="app in mockAppList"
+              v-for="app in appList"
               :key="app.id"
               :value="app.id"
               class="mb-2 bamo-nav-item"
               @click="handleAppClick(app)"
           >
             <v-list-item-icon class="mr-3">
-              <v-icon :color="app.isSecure ? '#FF9800' : '#78909C'">{{ app.icon }}</v-icon>
+              <v-icon :color="app.isSecure ? '#FF9800' : '#78909C'">mdi-{{ app.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="font-weight-medium text-body-2 grey--text text--darken-3">{{ app.name }}</v-list-item-title>
@@ -61,47 +61,72 @@
       <template v-slot:append>
         <div class="px-4 pb-6">
           <v-chip small color="green lighten-5" text-color="green darken-2" class="font-weight-medium w-100 justify-center bamo-status-chip">
-            <span class="pulse-dot mr-2"></span> Engine Online
+            <span class="pulse-dot mr-2"></span>Online
           </v-chip>
         </div>
       </template>
     </v-navigation-drawer>
 
-    <v-main class="bamo-main-bg flex-grow-1 pa-0" style="height: 100vh; overflow: hidden;">
-      <router-view></router-view>
+    <v-main class="flex-grow-1 pa-0" style="height: 100vh; overflow: hidden; background-color: #FFFFFF;">
+      <AIPortal v-if="activeAppId" :appId="activeAppId" :appUrl="currentAppUrl" />
+      <EmptyState v-else />
     </v-main>
   </div>
 </template>
 <script>
+
+import EmptyState from '@/components/EmptyState.vue';
+import AIPortal from "../views/AIPortal.vue"; // 我们马上写这个组件
+
 export default {
   name: 'MainLayout',
+  components: { AIPortal, EmptyState },
   data() {
     return {
-      activeAppId: '1',
-      mockAppList: [
-        { id: '1', name: 'SOP 知识检索引擎', icon: 'mdi-book-open-page-variant', isSecure: false },
-        { id: '2', name: '产线 CPK 深度分析', icon: 'mdi-chart-bell-curve-cumulative', isSecure: true },
-        { id: '3', name: '窑炉能耗监控中枢', icon: 'mdi-server-network', isSecure: true }
-      ]
+      activeAppId: null,
+      appList: []        // 真实的数据列表
     }
   },
+  created() {
+    this.fetchAppList();
+  },
   computed: {
-    currentAppName() {
-      const app = this.mockAppList.find(a => a.id === this.activeAppId);
-      return app ? app.name : '工作台';
+    currentAppUrl() {
+      const app = this.appList.find(a => a.id === this.activeAppId);
+      // 动态拼接 MaxKB URL
+      return app ? `http://192.168.8.141:8080/chat/${app.chatToken}` : '';
     }
   },
   methods: {
+
+    async fetchAppList() {
+      try {
+        const userId = localStorage.getItem('bamo_userId');
+
+        // 这里需要配置你的 token 头传递方式，通常在 axios 拦截器里做，这里演示直接传
+        const res = await this.$axios.get(`${this.$url.baseUrl}/api/portal/app/list?userId=${userId}`);
+        console.log(res);
+        // 将后端驼峰字段映射到前端
+        this.appList = res.data.data.map(item => ({
+          id: item.id,
+          name: item.appName,
+          icon: item.appIcon || 'hexagon',
+          isSecure: item.isSecure === 1,
+          chatToken: item.chatToken
+        }));
+      } catch (error) {
+        console.error("获取权限列表失败:", error);
+      }
+    },
     handleAppClick(app) {
       if (app.isSecure) {
         console.warn('【安全熔断】需前置 AuthDialog 提权授权', app.name);
-        // 此处后续将阻断并弹出 AuthDialog
       } else {
-        if (this.$route.name !== 'AIPortal') {
-          this.$router.push({ name: 'AIPortal' }).catch(()=>{});
-        }
+        this.activeAppId = app.id; // 点击后才触发右侧 iframe 渲染
       }
     },
+
+
     logout() {
       localStorage.removeItem('bamo_token');
       this.$router.push('/login');

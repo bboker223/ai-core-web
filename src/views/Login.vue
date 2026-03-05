@@ -68,6 +68,11 @@
         </v-card>
       </v-col>
     </v-row>
+
+    <v-snackbar  v-model="snackbar" :timeout="6000" :color="snackbarColor">
+      {{ snackbarMessage }}
+    </v-snackbar>
+
   </v-container>
 </template>
 
@@ -76,18 +81,50 @@ export default {
   name: 'Login',
   data: () => ({
     username: '',
-    password: ''
+    password: '',
+
+    snackbar: false,
+    snackbarColor: 'success',
+    snackbarMessage: '' ,
   }),
   methods: {
+    showSnackbar(message, color) {
+      this.snackbarColor = color;
+      this.snackbarMessage = message;
+      this.snackbar = true;
+    },
+
     handleLogin() {
       // 触发全局加载条
       this.$root.globalLoading = true;
-      setTimeout(() => {
-        localStorage.setItem('bamo_token', 'mock_token_123');
+
+      let url = this.$url.baseUrl + '/api/portal/login';
+      this.$axios.post( url, {
+        loginName: this.username,
+        password: this.password
+      }).then((res) => {
+
+        if (res.data.code === 200) {
+          // 保存凭证
+          const { token, userId, mesUserName } = res.data.data;
+          localStorage.setItem('bamo_token', token);
+          localStorage.setItem('bamo_userId', userId);
+          if(mesUserName) localStorage.setItem('bamo_userName', mesUserName);
+
+          // 登录成功，跳转工作台 (此时不带任何应用参数，将触发占位页)
+          this.$router.push('/portal');
+        } else {
+          this.showSnackbar( res.data.message, 'error');
+        }
+      }).catch((error) => {
+        console.error('请求失败:', error);
+      }).finally(()=>{
         this.$root.globalLoading = false;
-        this.$router.push('/portal');
-      }, 800); // 模拟网络延迟
-    }
+      })
+
+
+    },
+
   }
 }
 </script>

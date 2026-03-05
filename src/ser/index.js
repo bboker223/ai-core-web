@@ -1,5 +1,4 @@
 import axios from 'axios';
-import store from '@/store'; // 假设你已使用Vuex store
 import router from '@/router';
 
 axios.defaults.withCredentials = true;
@@ -37,43 +36,33 @@ let httpConfig = {
  */
 instance.interceptors.request.use(
     config => {
-        // 排除
-        if ( config.headers['Content-Type'] === 'multipart/form-data') {
+        if (config.headers['Content-Type'] === 'multipart/form-data') {
             return config;
         }
-        // 只有POST请求且有数据时才加密
         if (config.method === 'post') {
             config.headers['Content-Type'] = 'application/json';
-
+        }
+        // 【新增】自动从 localStorage 提取 Token 并放入请求头
+        const token = localStorage.getItem('bamo_token');
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
         }
         return config;
     },
-    error => {
-        return Promise.reject(error);
-    }
+    error => Promise.reject(error)
 );
-
-
-// 响应拦截器 解密
 instance.interceptors.response.use(
     response => {
-        // 如果异常，没有加密直接返回
-        if( response.data.jcode !== 200){
-            return response.data.payload
-        }
-
-        return response;
+        return response
     },
     error => {
-        if (error.response && (error.response.status === 400 ||  error.response.status === 401 || error.response.status === 500)) {
-            // token过期或无效，跳转到登录页
-            localStorage.removeItem('token');
-            store.commit('setApiSecretKey', '');
+        if (error.response && [400, 401, 500].includes(error.response.status)) {
+            localStorage.removeItem('bamo_token');
+            localStorage.removeItem('bamo_user_id');
             router.push('/login');
         }
         return Promise.reject(error);
     }
 );
-
 
 export default httpConfig;

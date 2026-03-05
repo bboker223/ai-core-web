@@ -14,7 +14,7 @@ const routes = [
     {
         path: '/',
         component: MainLayout,
-        redirect: '/portal',
+        redirect: '/login',
         children: [
             {
                 path: 'portal',
