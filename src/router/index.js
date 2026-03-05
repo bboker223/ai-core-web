@@ -1,41 +1,34 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import MainLayout from '../components/MainLayout.vue'
-
+import Router from 'vue-router'
 Vue.use(VueRouter)
 
 // 路由配置
-const routes = [
-    {
-        path: '/login',
-        name: 'Login',
-        component: () => import('../views/Login.vue')
-    },
-    {
-        path: '/',
-        component: MainLayout,
-        redirect: '/login',
-        children: [
-            {
-                path: 'portal',
-                name: 'AIPortal',
-                component: () => import('../views/AIPortal.vue'),
-                meta: { requiresAuth: true }
-            }
-        ]
-    },
-    {
-        path: '*',
-        name: 'NotFound',
-        component: () => import('../views/NotFoundPage.vue')
-    }
-]
-
-const router = new VueRouter({
-    mode: 'history',
-    base: process.env.BASE_URL,
-    routes
-})
+const router = new Router({
+    mode: 'hash', // 保持 hash 模式
+    routes: [
+        {
+            path: '/',
+            redirect: '/login'
+        },
+        {
+            path: '/login',
+            name: 'Login',
+            component: () => import('@/views/Login.vue')
+        },
+        // [修改核心]：将 MainLayout 作为独立的工作台入口，不需要 children
+        {
+            path: '/portal',
+            name: 'Portal',
+            component: () => import('@/components/MainLayout.vue')
+        },
+        {
+            path: '*',
+            name: 'NotFound',
+            component: () => import('@/views/NotFoundPage.vue')
+        }
+    ]
+});
 
 
 
