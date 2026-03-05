@@ -106,10 +106,10 @@ export default {
 
         if (res.data.code === 200) {
           // 保存凭证
-          const { token, userId, mesUserName } = res.data.data;
+          const { token, userId, userName } = res.data.data;
           localStorage.setItem('bamo_token', token);
           localStorage.setItem('bamo_userId', userId);
-          if(mesUserName) localStorage.setItem('bamo_userName', mesUserName);
+          localStorage.setItem('bamo_userName', userName);
 
           // 登录成功，跳转工作台 (此时不带任何应用参数，将触发占位页)
           this.$router.push('/portal');
