@@ -20,7 +20,6 @@ html {
   overflow-y: auto;
 }
 
-/* 工业互联网标志性流光渐变条 */
 .bamo-gradient-bar {
   height: 4px;
   width: 100%;
@@ -38,7 +37,6 @@ html {
   100% { background-position: -100% 0; }
 }
 
-/* 新增渐隐动画 */
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.4s ease;
 }

@@ -5,12 +5,12 @@
         <div class="ring ring-1"></div>
         <div class="ring ring-2"></div>
         <div class="cube-container">
-          <v-icon size="80" color="#94A3B8">mdi-hexagon-outline</v-icon>
-          <v-icon size="40" color="#38BDF8" class="cube-core">mdi-brain</v-icon>
+          <v-icon size="80" color="#94A3B8"  style="font-size: 90px">mdi-hexagon-outline</v-icon>
+          <v-icon size="40" color="#38BDF8" class="cube-core" style="font-size: 35px" >mdi-head-cog-outline</v-icon>
         </div>
       </div>
       <p class="text-subtitle-1 grey--text text--darken-1 mb-8 mx-auto" style="max-width: 480px;">
-        已获取到您iMES权限下可用的 AI 模型
+        已获取到您权限内可用的 AI 模型
       </p>
       <v-chip color="rgba(56, 189, 248, 0.1)" text-color="#0284C7" class="px-6 py-4 font-weight-bold text-body-2 bamo-chip">
         <v-icon left size="22" class="mr-2 pulse-icon">mdi-gesture-tap</v-icon>
@@ -27,17 +27,18 @@ export default {
 </script>
 
 <style scoped>
-/* 静态点阵背景，参数对齐登录页质感 */
 .bamo-empty-bg {
   background-color: #F8FAFC;
   background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
   background-size: 24px 24px;
+  background-repeat: repeat;
+  background-position: center center;
   position: relative;
   overflow: hidden;
 }
 
 .content-wrapper { position: relative; z-index: 10; }
-.core-engine { position: relative; width: 160px; height: 160px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+.core-engine { position: relative; width: 220px; height: 220px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
 .ring { position: absolute; border-radius: 50%; border: 2px dashed #CBD5E1; }
 .ring-1 { width: 100%; height: 100%; animation: spin-slow 20s linear infinite; }
 .ring-2 { width: 70%; height: 70%; border: 2px dashed rgba(56, 189, 248, 0.4); animation: spin-slow-reverse 12s linear infinite; }

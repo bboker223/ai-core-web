@@ -95,7 +95,6 @@ export default {
     },
 
     handleLogin() {
-      // 触发全局加载条
       this.$root.globalLoading = true;
 
       let url = this.$url.baseUrl + '/api/portal/login';
@@ -111,7 +110,7 @@ export default {
           localStorage.setItem('bamo_userId', userId);
           localStorage.setItem('bamo_userName', userName);
 
-          // 登录成功，跳转工作台 (此时不带任何应用参数，将触发占位页)
+          // 登录成功，跳转工作台
           this.$router.push('/portal');
         } else {
           this.showSnackbar( res.data.message, 'error');
@@ -130,26 +129,23 @@ export default {
 </script>
 
 <style scoped>
-/* 左侧暗色流光遮罩层，提升高级感 */
 .overlay-gradient {
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.4) 75%);
+  user-select: none;
 }
 .tracking-tight {
   letter-spacing: -0.02em !important;
 }
 
-/* 新增核心防溢出控制 */
 .login-wrapper {
   height: 100vh !important;
   max-height: 100vh;
-  overflow: hidden; /* 绝对截断滚动条 */
+  overflow: hidden;
 }
 .bamo-login-left {
-  height: 100vh; /* 强制左侧列与视口等高 */
+  height: 100vh;
 }
 
-
-/* 右侧点阵背景保留 */
 .login-bg {
   background: #F8FAFC;
   background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
@@ -159,7 +155,6 @@ export default {
   background-color: transparent !important;
 }
 
-/* Logo 占位框 */
 .logo-placeholder {
   width: 281px;
   height: 52px;

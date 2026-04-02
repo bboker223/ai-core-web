@@ -33,7 +33,7 @@
       </div>
 
       <v-list nav class="px-3 mt-4">
-        <div class="px-2 mb-2 text-caption grey--text font-weight-bold">解析模型</div>
+        <div class="px-2 mb-2 text-caption grey--text font-weight-bold">智能工作空间</div>
         <v-list-item-group v-model="activeAppId" color="#1976D2">
           <v-list-item
               v-for="app in appList"
@@ -56,10 +56,9 @@
       </v-list>
 
       <template v-slot:append>
-        <div class="px-4 pb-6">
-          <v-chip small color="green lighten-5" text-color="green darken-2" class="font-weight-medium w-100 justify-center bamo-status-chip">
-            <span class="pulse-dot mr-2"></span>Online
-          </v-chip>
+
+        <div class="text-center bamo-copyright">
+          <div class="opacity-70">   <v-icon size="12" color="#94A3B8" class="mr-1">mdi-shield-check</v-icon>巴莫科技 · 工业智能AI中枢 v1.0</div>
         </div>
       </template>
     </v-navigation-drawer>
@@ -83,7 +82,7 @@ export default {
   data() {
     return {
       activeAppId: null, // 默认不选中任何应用
-      appList: []        // 真实的数据列表
+      appList: []
     }
   },
   created() {
@@ -123,6 +122,8 @@ export default {
     },
     logout() {
       localStorage.removeItem('bamo_token');
+      localStorage.removeItem('bamo_userId');
+      localStorage.removeItem('bamo_userName');
       this.$router.push('/login');
     }
   }
@@ -148,5 +149,16 @@ export default {
   0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
   70% { box-shadow: 0 0 0 5px rgba(16, 185, 129, 0); }
   100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.bamo-copyright {
+  font-size: 12px;
+  color: #94A3B8;
+  user-select: none;
+}
+.bamo-copyright .opacity-70 {
+  opacity: 0.9;
+  transform: scale(0.9); /* 利用缩放实现比 12px 更小的原生字号 */
+  transform-origin: center;
 }
 </style>

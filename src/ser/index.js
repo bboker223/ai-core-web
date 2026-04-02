@@ -58,7 +58,7 @@ instance.interceptors.response.use(
     error => {
         if (error.response && [400, 401, 500].includes(error.response.status)) {
             localStorage.removeItem('bamo_token');
-            localStorage.removeItem('bamo_user_id');
+            localStorage.removeItem('bamo_userId');
             router.push('/login');
         }
         return Promise.reject(error);

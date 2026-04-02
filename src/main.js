@@ -21,6 +21,15 @@ import '@kangc/v-md-editor/lib/theme/style/github.css';
 // highlightjs
 import hljs from 'highlight.js';
 
+
+if (process.env.NODE_ENV === 'production') {
+  // 1. 物理屏蔽：禁用鼠标右键菜单
+  document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+  });
+}
+
+
 VMdPreview.use(githubTheme, {
   Hljs: hljs,
 });
@@ -38,7 +47,6 @@ new Vue({
   vuetify,
   data() {
     return {
-      // 核心黑盒：全局防闪烁与流光条调度状态
       globalLoading: false
     }
   },
