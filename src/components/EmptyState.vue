@@ -16,15 +16,26 @@
         <v-icon left size="22" class="mr-2 pulse-icon">mdi-gesture-tap</v-icon>
         请从左侧控制台选择...
       </v-chip>
+
+<!--      <div style="width: 350px; height: 350px; margin-top: 20px;">-->
+<!--        <AiCoreAnim />-->
+<!--      </div>-->
+
     </div>
   </div>
 </template>
 
 <script>
+
+// import AiCoreAnim from '@/components/AiCoreAnim.vue';
 export default {
-  name: 'EmptyState'
+  name: 'EmptyState',
+  components: {
+    // AiCoreAnim
+  },
 }
 </script>
+
 
 <style scoped>
 .bamo-empty-bg {

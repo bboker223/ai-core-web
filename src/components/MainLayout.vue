@@ -3,7 +3,7 @@
     <v-navigation-drawer permanent width="260" color="#FFFFFF" class="bamo-light-drawer flex-shrink-0">
       <div class="px-4 py-4 d-flex align-center justify-space-between bamo-drawer-header">
         <div class="d-flex align-center">
-          <v-icon color="#1976D2" large class="mr-2">mdi-hexagon-multiple</v-icon>
+          <img src="@/assets/bmlogo.png" alt="巴莫科技" height="32" class="mr-2" style="object-fit: contain;" />
           <div>
             <div class="text-h6 font-weight-bold grey--text text--darken-4 tracking-tight">巴莫AI平台</div>
           </div>
@@ -102,6 +102,13 @@ export default {
       try {
         const userId = localStorage.getItem('bamo_userId');
         const res = await this.$axios.get(`${this.$url.baseUrl}/api/portal/app/list?userId=${userId}`);
+
+        if (res.data.code === 401) {
+          console.warn("登录已过期，请重新登录");
+          this.logout();
+          return;
+        }
+
         this.appList = res.data.data.map(item => ({
           id: item.id,
           name: item.appName,
@@ -133,11 +140,18 @@ export default {
 <style scoped>
 .py-4 { padding-top: 10px !important; padding-bottom: 10px !important; }
 .bamo-light-drawer { border-right: 1px solid #E5E7EB !important; }
-.bamo-drawer-header { border-bottom: 1px solid #F3F4F6; }
+.bamo-drawer-header {
+  border-bottom: 1px solid #F3F4F6;
+  /* 从白色平滑过渡到右侧的起始色 */
+  background: linear-gradient(90deg, #ffffff 0%, #ebf1ff 100%);
+  //border-bottom: 1px solid #F3F4F6;
+  //background: linear-gradient(
+  //    269deg, #ebf1ff 100%, #e5fbf8 56.18%, #f2ebfe 83.18%);
+}
 .tracking-tight { letter-spacing: -0.02em !important; }
 .bamo-nav-item { border-radius: 8px !important; transition: all 0.2s ease; }
 .bamo-nav-item:hover { background-color: #F3F4F6; }
-.v-list-item--active.bamo-nav-item { background-color: #EFF6FF !important; }
+.v-list-item--active.bamo-nav-item { background: linear-gradient(90deg, #ffffff 0%, #ebf1ff 100%)!important; }
 .hover-danger:hover { background-color: #FEF2F2 !important; }
 .bamo-status-chip { border: 1px solid rgba(16, 185, 129, 0.2); }
 .pulse-dot {
@@ -156,6 +170,7 @@ export default {
   color: #94A3B8;
   user-select: none;
 }
+
 .bamo-copyright .opacity-70 {
   opacity: 0.9;
   transform: scale(0.9); /* 利用缩放实现比 12px 更小的原生字号 */

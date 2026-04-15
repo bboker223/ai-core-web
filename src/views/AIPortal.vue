@@ -9,10 +9,8 @@
         class="d-flex flex-column align-center justify-center"
     >
       <div class="text-center">
-        <v-progress-circular indeterminate color="#2196F3" size="56" width="4" class="mb-4"></v-progress-circular>
-        <div class="text-subtitle-2 grey--text text--darken-2 font-weight-medium tracking-wide">
-          正在加载...
-        </div>
+        <v-progress-circular indeterminate color="#90CAF9" size="24" width="2"></v-progress-circular>
+        <div class="text-subtitle-2 grey--text text--darken-2 font-weight-medium tracking-wide"></div>
       </div>
     </v-overlay>
 
