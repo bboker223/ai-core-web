@@ -5,9 +5,13 @@
         <div class="ring ring-1"></div>
         <div class="ring ring-2"></div>
         <div class="cube-container">
-          <v-icon size="80" color="#94A3B8"  style="font-size: 90px">mdi-hexagon-outline</v-icon>
-          <v-icon size="40" color="#38BDF8" class="cube-core" style="font-size: 35px" >mdi-head-cog-outline</v-icon>
+          <LottiePlayer
+              :animationData="myAnimationJson"
+              width="150px"
+              height="150px"
+          />
         </div>
+
       </div>
       <p class="text-subtitle-1 grey--text text--darken-1 mb-8 mx-auto" style="max-width: 480px;">
         已获取到您权限内可用的 AI 模型
@@ -27,12 +31,22 @@
 
 <script>
 
-// import AiCoreAnim from '@/components/AiCoreAnim.vue';
+// 1. 引入我们刚刚写的播放器组件
+import LottiePlayer from '@/components/LottiePlayer.vue';
+// 2. 引入你放在 assets 里的 json 文件
+import artificial from '@/assets/artificial-intelligence.json';
+
 export default {
   name: 'EmptyState',
   components: {
-    // AiCoreAnim
+    LottiePlayer
   },
+  data(){
+    return{
+      // 把引入的 json 数据放到 data 里，准备传给组件
+      myAnimationJson: artificial,
+    }
+  }
 }
 </script>
 

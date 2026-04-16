@@ -78,7 +78,10 @@ import AIPortal from '@/views/AIPortal.vue';
 
 export default {
   name: 'MainLayout',
-  components: { AIPortal, EmptyState },
+  components: {
+    AIPortal,
+    EmptyState,
+  },
   data() {
     return {
       activeAppId: null, // 默认不选中任何应用
